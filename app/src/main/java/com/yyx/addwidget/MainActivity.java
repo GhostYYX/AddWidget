@@ -3,6 +3,7 @@ package com.yyx.addwidget;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,17 +13,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout add_linear;
+    private int index=1;
+
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         add_linear = (LinearLayout) findViewById(R.id.add_linear);
@@ -40,9 +47,24 @@ public class MainActivity extends AppCompatActivity {
     private void addButton(){
         LayoutInflater inflater = getLayoutInflater();
         final View viewUrl = inflater.inflate(R.layout.activity_main_button, null);
+        Button button = (Button) viewUrl.findViewById(R.id.button);
+        button.setText("列队"+index);
+
         LinearLayout.LayoutParams UrL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         viewUrl.setLayoutParams(UrL);
         add_linear.addView(viewUrl);
+        index++;
+        //获取焦点
+        //让最后一个一直显示
+        add_linear.setFocusable(true);
+        add_linear.setFocusableInTouchMode(true);
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
 
